@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResQTravel — AI Travel Disruption Recovery Agent</title>
+  <meta name="description" content="ResQTravel autonomously detects travel disruptions, finds alternate routes, and recovers your itinerary using Gemini AI in real-time." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══════════════ TOP NAVIGATION BAR ═══════════════ -->
+  <nav class="top-nav" id="topNav">
+    <div class="nav-inner">
+      <!-- Brand -->
+      <div class="nav-brand">
+        <div class="brand-logo">
+          <div class="brand-icon">
+            <i data-lucide="shield-check"></i>
+          </div>
+          <span class="brand-name">Resq<span class="brand-accent">Travel</span></span>
+        </div>
+        <div class="agent-status">
+          <span class="pulse-dot"></span>
+          <span class="status-text">AI Agent Active</span>
+          <span class="status-model">(Gemini 2.5 Flash)</span>
+        </div>
+      </div>
+
+      <!-- Nav Links -->
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#" class="nav-link active"><i data-lucide="briefcase"></i> Active Trips</a></li>
+        <li><a href="#" class="nav-link"><i data-lucide="sparkles"></i> Smart Recovery</a></li>
+        <li><a href="#" class="nav-link"><i data-lucide="file-text"></i> Policies</a></li>
+        <li><a href="#" class="nav-link"><i data-lucide="file-check-2"></i> Claims</a></li>
+      </ul>
+
+      <!-- User Area -->
+      <div class="nav-user">
+        <button class="notification-bell" id="notifBell" aria-label="Notifications">
+          <i data-lucide="bell"></i>
+          <span class="notif-badge">1</span>
+        </button>
+        <div class="user-avatar" id="userAvatar">
+          <span>CK</span>
+        </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Notification Dropdown -->
+    <div class="notif-dropdown" id="notifDropdown">
+      <div class="notif-header">
+        <span>Notifications</span>
+        <span class="notif-count-badge">1 Critical</span>
+      </div>
+      <div class="notif-item critical">
+        <div class="notif-icon"><i data-lucide="alert-triangle"></i></div>
+        <div class="notif-content">
+          <strong>Critical Disruption Detected</strong>
+          <p>IndiGo 6E-402 (BLR → GOI) delayed by 6 hours. Downstream connections at risk.</p>
+          <span class="notif-time">2 mins ago</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════ HERO / STATUS ALERT BANNER ═══════════════ -->
+  <section class="hero-alert" id="heroAlert">
+    <div class="hero-alert-inner">
+      <div class="alert-stripe"></div>
+      <div class="alert-body">
+        <div class="alert-top-row">
+          <div class="alert-icon-box">
+            <i data-lucide="siren"></i>
+          </div>
+          <div class="alert-main-text">
+            <div class="alert-label">
+              <span class="alert-badge critical-badge"><i data-lucide="zap"></i> Live Disruption Detected</span>
+              <span class="alert-time-ago">Detected 4 min ago</span>
+            </div>
+            <h1 class="alert-headline">
+              IndiGo 6E-402 <span class="route-tag">BLR → GOI</span> — Delayed by <span class="highlight-red">6 hours</span>
+            </h1>
+          </div>
+          <button class="alert-dismiss" id="alertDismiss" aria-label="Dismiss"><i data-lucide="x"></i></button>
+        </div>
+        <div class="alert-impacts">
+          <div class="impact-chip danger">
+            <i data-lucide="alert-triangle"></i>
+            <span>Missed Connection: <strong>Goa Express Train</strong> at 4:30 PM</span>
+          </div>
+          <div class="impact-chip warning">
+            <i data-lucide="clock-alert"></i>
+            <span>Hotel Late Check-in Penalty Risk: <strong>Taj Resort, North Goa</strong></span>
+          </div>
+          <div class="impact-chip info">
+            <i data-lucide="bot"></i>
+            <span>AI Recovery Agent has identified <strong>3 alternate routes</strong> — Review below</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ MAIN DASHBOARD (SPLIT SCREEN) ═══════════════ -->
+  <main class="dashboard" id="dashboard">
+
+    <!-- LEFT PANEL: Multi-Leg Disruption Visualizer -->
+    <aside class="panel-left">
+
+      <!-- Ticket Ingestion Box -->
+      <div class="card ticket-ingest" id="dropZone">
+        <div class="card-header">
+          <h2><i data-lucide="scan-line"></i> Ticket Ingestion</h2>
+          <span class="powered-tag"><i data-lucide="sparkles"></i> Gemini Multimodal OCR</span>
+        </div>
+        <div class="drop-zone" id="dropArea">
+          <div class="drop-zone-content">
+            <div class="drop-icon"><i data-lucide="upload-cloud"></i></div>
+            <p class="drop-text">Drop Ticket Screenshot, PNR SMS, or PDF</p>
+            <p class="drop-subtext">or <button class="browse-btn" id="browseBtn">browse files</button></p>
+          </div>
+          <div class="drop-zone-active">
+            <i data-lucide="check-circle-2"></i>
+            <span>Release to upload</span>
+          </div>
+        </div>
+        <div class="ingested-tags">
+          <span class="ingested-tag"><i data-lucide="ticket"></i> PNR: TXKL8M <i data-lucide="x" class="tag-remove"></i></span>
+          <span class="ingested-tag"><i data-lucide="image"></i> boarding_pass.jpg <i data-lucide="x" class="tag-remove"></i></span>
+        </div>
+      </div>
+
+      <!-- Active Trip Timeline -->
+      <div class="card trip-timeline-card">
+        <div class="card-header">
+          <h2><i data-lucide="route"></i> Active Trip Timeline</h2>
+          <span class="trip-id-tag">Trip #BLR-GOA-2026</span>
+        </div>
+        <div class="trip-timeline" id="tripTimeline">
+
+          <!-- Leg 1: Flight (Disrupted) -->
+          <div class="timeline-leg disrupted" id="leg1">
+            <div class="timeline-connector">
+              <div class="connector-dot disrupted-dot">
+                <i data-lucide="plane"></i>
+              </div>
+              <div class="connector-line disrupted-line"></div>
+            </div>
+            <div class="leg-card disrupted-card">
+              <div class="leg-header">
+                <div class="leg-title-row">
+                  <span class="leg-label">Leg 1 — Flight</span>
+                  <span class="leg-badge badge-disrupted"><i data-lucide="alert-circle"></i> Delayed 6h</span>
+                </div>
+                <h3 class="leg-name">IndiGo 6E-402</h3>
+                <div class="leg-route">
+                  <span class="station">BLR <small>Bengaluru</small></span>
+                  <span class="route-arrow"><i data-lucide="arrow-right"></i></span>
+                  <span class="station">GOI <small>Goa</small></span>
+                </div>
+              </div>
+              <div class="leg-details">
+                <div class="detail-item">
+                  <span class="detail-label">Original Departure</span>
+                  <span class="detail-value strikethrough">11:00 AM</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Original Arrival</span>
+                  <span class="detail-value strikethrough">12:30 PM</span>
+                </div>
+                <div class="detail-item highlight-bad">
+                  <span class="detail-label">New Est. Arrival</span>
+                  <span class="detail-value new-time">6:30 PM</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Terminal</span>
+                  <span class="detail-value">T1 — Gate 14B</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leg 2: Train (Broken) -->
+          <div class="timeline-leg broken" id="leg2">
+            <div class="timeline-connector">
+              <div class="connector-dot broken-dot">
+                <i data-lucide="train-front"></i>
+              </div>
+              <div class="connector-line broken-line"></div>
+            </div>
+            <div class="leg-card broken-card">
+              <div class="leg-header">
+                <div class="leg-title-row">
+                  <span class="leg-label">Leg 2 — Train</span>
+                  <span class="leg-badge badge-broken"><i data-lucide="unlink"></i> Connection Broken</span>
+                </div>
+                <h3 class="leg-name">Goa Express (12779)</h3>
+                <div class="leg-route">
+                  <span class="station">MAO <small>Madgaon Jn.</small></span>
+                  <span class="route-arrow"><i data-lucide="arrow-right"></i></span>
+                  <span class="station">THVM <small>Thivim</small></span>
+                </div>
+              </div>
+              <div class="leg-details">
+                <div class="detail-item">
+                  <span class="detail-label">Scheduled Departure</span>
+                  <span class="detail-value">4:30 PM</span>
+                </div>
+                <div class="detail-item highlight-bad">
+                  <span class="detail-label">Status</span>
+                  <span class="detail-value status-missed">Will Be Missed</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Leg 3: Hotel (At Risk) -->
+          <div class="timeline-leg at-risk" id="leg3">
+            <div class="timeline-connector">
+              <div class="connector-dot risk-dot">
+                <i data-lucide="bed-double"></i>
+              </div>
+            </div>
+            <div class="leg-card risk-card">
+              <div class="leg-header">
+                <div class="leg-title-row">
+                  <span class="leg-label">Leg 3 — Stay</span>
+                  <span class="leg-badge badge-risk"><i data-lucide="clock-alert"></i> At Risk</span>
+                </div>
+                <h3 class="leg-name">Taj Resort & Convention Centre</h3>
+                <p class="leg-location"><i data-lucide="map-pin"></i> North Goa, Dona Paula</p>
+              </div>
+              <div class="leg-details">
+                <div class="detail-item">
+                  <span class="detail-label">Check-in Window</span>
+                  <span class="detail-value">2:00 PM – 11:00 PM</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Booking Ref</span>
+                  <span class="detail-value">#A8X92B</span>
+                </div>
+                <div class="detail-item highlight-bad">
+                  <span class="detail-label">Risk</span>
+                  <span class="detail-value status-missed">No-show / Cancellation Penalty ₹4,500</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Natural Language Constraint Input -->
+      <div class="card constraint-card">
+        <div class="card-header">
+          <h2><i data-lucide="message-square-text"></i> Travel Constraints</h2>
+        </div>
+        <div class="constraint-input-wrapper">
+          <div class="constraint-chips" id="constraintChips">
+            <span class="constraint-chip"><i data-lucide="heart-pulse"></i> Senior citizen (grandmother) <button class="chip-remove" aria-label="Remove"><i data-lucide="x"></i></button></span>
+            <span class="constraint-chip"><i data-lucide="moon-star"></i> No overnight buses <button class="chip-remove" aria-label="Remove"><i data-lucide="x"></i></button></span>
+            <span class="constraint-chip"><i data-lucide="indian-rupee"></i> Budget ≤ ₹3,000 <button class="chip-remove" aria-label="Remove"><i data-lucide="x"></i></button></span>
+            <span class="constraint-chip"><i data-lucide="clock-3"></i> Arrive before 9:00 PM <button class="chip-remove" aria-label="Remove"><i data-lucide="x"></i></button></span>
+          </div>
+          <div class="constraint-input-bar">
+            <i data-lucide="sparkles" class="input-icon"></i>
+            <input type="text" placeholder="e.g. 'No layovers longer than 2 hours, prefer window seat...'" id="constraintInput" />
+            <button class="add-constraint-btn" id="addConstraintBtn"><i data-lucide="plus"></i></button>
+          </div>
+          <p class="constraint-hint">Describe preferences in natural language — Gemini will factor them into recovery plans.</p>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- RIGHT PANEL: Agentic Recovery Engine -->
+    <section class="panel-right">
+
+      <!-- Recovery Plan Header -->
+      <div class="recovery-header">
+        <div class="recovery-title-row">
+          <h2><i data-lucide="cpu"></i> AI Recovery Plan</h2>
+          <div class="recovery-meta">
+            <span class="gen-time"><i data-lucide="timer"></i> Generated in <strong>1.1s</strong></span>
+            <span class="gen-model">via Gemini 2.5 Flash</span>
+          </div>
+        </div>
+        <p class="recovery-subtitle">3 alternate routes ranked by constraint match, cost, and arrival time.</p>
+      </div>
+
+      <!-- Recovery Option Cards -->
+      <div class="recovery-options" id="recoveryOptions">
+
+        <!-- Option 1: AI Pick — Recommended -->
+        <div class="option-card recommended" id="option1">
+          <div class="option-ribbon">AI Pick — Recommended</div>
+          <div class="option-header">
+            <div class="option-transport">
+              <div class="transport-icon flight-icon"><i data-lucide="plane"></i></div>
+              <div>
+                <h3 class="option-name">Akasa Air QP-1382</h3>
+                <p class="option-route">BLR Terminal 1 → GOI Dabolim</p>
+              </div>
+            </div>
+            <div class="option-score">
+              <div class="score-ring" data-score="96">
+                <svg viewBox="0 0 36 36">
+                  <path class="score-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="score-fill" stroke-dasharray="96, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <span class="score-value">96</span>
+              </div>
+              <span class="score-label">Match</span>
+            </div>
+          </div>
+          <div class="option-details-grid">
+            <div class="opt-detail">
+              <i data-lucide="clock"></i>
+              <div>
+                <span class="opt-label">Departs</span>
+                <span class="opt-value">1:45 PM <small>(in 90 min)</small></span>
+              </div>
+            </div>
+            <div class="opt-detail">
+              <i data-lucide="map-pin"></i>
+              <div>
+                <span class="opt-label">Arrives</span>
+                <span class="opt-value good-val">4:10 PM</span>
+              </div>
+            </div>
+            <div class="opt-detail">
+              <i data-lucide="indian-rupee"></i>
+              <div>
+                <span class="opt-label">Extra Cost</span>
+                <span class="opt-value">₹3,100</span>
+              </div>
+            </div>
+            <div class="opt-detail">
+              <i data-lucide="luggage"></i>
+              <div>
+                <span class="opt-label">Cabin Bag</span>
+                <span class="opt-value">7 kg included</span>
+              </div>
+            </div>
+          </div>
+          <div class="option-saves">
+            <span class="save-tag success"><i data-lucide="check-circle-2"></i> Saves train connection</span>
+            <span class="save-tag success"><i data-lucide="check-circle-2"></i> Zero hotel penalty</span>
+            <span class="save-tag success"><i data-lucide="check-circle-2"></i> Senior-friendly</span>
+          </div>
+          <div class="option-reasoning">
+            <div class="reasoning-icon"><i data-lucide="brain"></i></div>
+            <p><strong>Gemini Reasoning:</strong> Best constraint match — senior-citizen friendly, arrives 50 min before train departure, under ₹3,000 budget cap with partial credit from cancelled ticket, and prevents downstream hotel no-show penalty (₹4,500).</p>
+          </div>
+          <div class="option-actions">
+            <button class="btn-primary rebook-btn" id="rebookBtn1">
+              <i data-lucide="zap"></i> 1-Click Rebook
+            </button>
+            <button class="btn-secondary">
+              <i data-lucide="info"></i> View Details
+            </button>
+          </div>
+        </div>
+
+        <!-- Option 2: Cheapest Alternative -->
+        <div class="option-card" id="option2">
+          <div class="option-ribbon cheapest">Cheapest Alternative</div>
+          <div class="option-header">
+            <div class="option-transport">
+              <div class="transport-icon train-icon"><i data-lucide="train-front"></i></div>
+              <div>
+                <h3 class="option-name">Vande Bharat + Express Cab</h3>
+                <p class="option-route">BLR Yeshwantpur → Madgaon Jn. + Cab to North Goa</p>
+              </div>
+            </div>
+            <div class="option-score">
+              <div class="score-ring" data-score="74">
+                <svg viewBox="0 0 36 36">
+                  <path class="score-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="score-fill" stroke-dasharray="74, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <span class="score-value">74</span>
+              </div>
+              <span class="score-label">Match</span>
+            </div>
+          </div>
+          <div class="option-details-grid">
+            <div class="opt-detail">
+              <i data-lucide="clock"></i>
+              <div>
+                <span class="opt-label">Departs</span>
+                <span class="opt-value">2:15 PM</span>
+              </div>
+            </div>
+            <div class="opt-detail">
+              <i data-lucide="map-pin"></i>
+              <div>
+                <span class="opt-label">Arrives</span>
+                <span class="opt-value">8:15 PM</span>
+              </div>
+            </div>
+            <div class="opt-detail">
+              <i data-lucide="indian-rupee"></i>
+              <div>
+                <span class="opt-label">Extra Cost</span>
+                <span class="opt-value good-val">₹1,200</span>
+              </div>
+            </div>
+            <div class="opt-detail">
+              <i data-lucide="timer"></i>
+              <div>
+                <span class="opt-label">Travel Time</span>
+                <span class="opt-value">~6 hrs</span>
+              </div>
+            </div>
+          </div>
+          <div class="option-saves">
+            <span class="save-tag success"><i data-lucide="check-circle-2"></i> Within budget</span>
+            <span class="save-tag warning"><i data-lucide="alert-triangle"></i> Tight hotel check-in</span>
+            <span class="save-tag caution"><i data-lucide="x-circle"></i> Misses train</span>
+          </div>
+          <div class="option-reasoning">
+            <div class="reasoning-icon"><i data-lucide="brain"></i></div>
+            <p><strong>Gemini Reasoning:</strong> Lowest cost option at ₹1,200 — well within budget. However, 6-hour rail journey may not be ideal for a senior traveler. Hotel check-in is tight but feasible. Train connection is missed.</p>
+          </div>
+          <div class="option-actions">
+            <button class="btn-primary">
+              <i data-lucide="zap"></i> 1-Click Rebook
+            </button>
+            <button class="btn-secondary">
+              <i data-lucide="info"></i> View Details
+            </button>
+          </div>
+        </div>
+
+        <!-- Option 3: Direct Route -->
+        <div class="option-card" id="option3">
+          <div class="option-ribbon direct">Direct Route</div>
+          <div class="option-header">
+            <div class="option-transport">
+              <div class="transport-icon flight-icon"><i data-lucide="plane"></i></div>
+              <div>
+                <h3 class="option-name">IndiGo 6E-501 (Next Morning)</h3>
+                <p class="option-route">BLR T1 → GOI Manohar Intl. (Non-stop)</p>
+              </div>
+            </div>
+            <div class="option-score">
+              <div class="score-ring" data-score="58">
+                <svg viewBox="0 0 36 36">
+                  <path class="score-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="score-fill" stroke-dasharray="58, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <span class="score-value">58</span>
+              </div>
+              <span class="score-label">Match</span>
+            </div>
+          </div>
+          <div class="option-details-grid">
+            <div class="opt-detail">
+              <i data-lucide="clock"></i>
+              <div>
+                <span class="opt-label">Departs</span>
+                <span class="opt-value">7:00 AM (Tomorrow)</span>
+              </div>
+            </div>
+            <div class="opt-detail">
+              <i data-lucide="map-pin"></i>
+              <div>
+                <span class="opt-label">Arrives</span>
+                <span class="opt-value">8:25 AM</span>
+              </div>
+            </div>
+            <div class="opt-detail">
+              <i data-lucide="indian-rupee"></i>
+              <div>
+                <span class="opt-label">Extra Cost</span>
+                <span class="opt-value">₹0 (rebooked)</span>
+              </div>
+            </div>
+            <div class="opt-detail">
+              <i data-lucide="sofa"></i>
+              <div>
+                <span class="opt-label">Bonus</span>
+                <span class="opt-value good-val">Free Transit Lounge</span>
+              </div>
+            </div>
+          </div>
+          <div class="option-saves">
+            <span class="save-tag success"><i data-lucide="check-circle-2"></i> Zero extra cost</span>
+            <span class="save-tag success"><i data-lucide="check-circle-2"></i> Lounge access</span>
+            <span class="save-tag caution"><i data-lucide="x-circle"></i> Loses 1 night</span>
+          </div>
+          <div class="option-reasoning">
+            <div class="reasoning-icon"><i data-lucide="brain"></i></div>
+            <p><strong>Gemini Reasoning:</strong> Completely free rebook to next-morning non-stop flight. Includes complimentary transit lounge at BLR. However, first night of hotel is lost — no-show penalty applies (₹4,500). Does not meet "arrive before 9 PM" constraint.</p>
+          </div>
+          <div class="option-actions">
+            <button class="btn-primary">
+              <i data-lucide="zap"></i> 1-Click Rebook
+            </button>
+            <button class="btn-secondary">
+              <i data-lucide="info"></i> View Details
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Autonomous Dispatch Section -->
+      <div class="dispatch-section" id="dispatchSection">
+        <div class="dispatch-header">
+          <h2><i data-lucide="bot"></i> Auto-Pilot Actions</h2>
+          <span class="auto-tag"><i data-lucide="wand-2"></i> Autonomously Drafted by AI</span>
+        </div>
+
+        <!-- Hotel Hold Message -->
+        <div class="dispatch-card" id="hotelDispatch">
+          <div class="dispatch-card-header">
+            <div class="dispatch-title">
+              <div class="dispatch-icon hotel-dispatch-icon"><i data-lucide="building-2"></i></div>
+              <div>
+                <h3>Auto-Drafted Hotel Hold Message</h3>
+                <p class="dispatch-dest">To: Taj North Goa — Front Desk Reception</p>
+              </div>
+            </div>
+            <span class="dispatch-status-tag pending"><i data-lucide="clock"></i> Pending</span>
+          </div>
+          <div class="dispatch-message-box">
+            <textarea id="hotelMessage" rows="4">Hello Front Desk,
+
+This is regarding booking PNR #A8X92B under the name Chirag Kumar. Our IndiGo flight 6E-402 (BLR → GOI) has been delayed by 6 hours. We are now arriving at approximately 12:30 AM via an alternate train. 
+
+Could you kindly hold our booking and waive the no-show fee? We will be checking in late tonight. Thank you for your understanding.</textarea>
+          </div>
+          <div class="dispatch-actions">
+            <button class="btn-dispatch whatsapp"><i data-lucide="message-circle"></i> Send via WhatsApp API</button>
+            <button class="btn-dispatch email"><i data-lucide="mail"></i> Send via Email</button>
+            <button class="btn-dispatch edit"><i data-lucide="pencil"></i> Edit</button>
+          </div>
+        </div>
+
+        <!-- DGCA Compensation Claim -->
+        <div class="dispatch-card" id="dgcaDispatch">
+          <div class="dispatch-card-header">
+            <div class="dispatch-title">
+              <div class="dispatch-icon claim-dispatch-icon"><i data-lucide="scale"></i></div>
+              <div>
+                <h3>DGCA Flight Compensation Claim</h3>
+                <p class="dispatch-dest">One-click filing — Auto-filled with delay proof & passenger details</p>
+              </div>
+            </div>
+            <span class="dispatch-status-tag ready"><i data-lucide="check-circle-2"></i> Ready to File</span>
+          </div>
+          <div class="claim-preview">
+            <div class="claim-grid">
+              <div class="claim-field">
+                <span class="claim-label">Passenger</span>
+                <span class="claim-value">Chirag Kumar + 1 (Grandmother)</span>
+              </div>
+              <div class="claim-field">
+                <span class="claim-label">Flight</span>
+                <span class="claim-value">IndiGo 6E-402</span>
+              </div>
+              <div class="claim-field">
+                <span class="claim-label">Route</span>
+                <span class="claim-value">BLR → GOI</span>
+              </div>
+              <div class="claim-field">
+                <span class="claim-label">Delay Duration</span>
+                <span class="claim-value highlight-red">6 Hours</span>
+              </div>
+              <div class="claim-field">
+                <span class="claim-label">DGCA Rule</span>
+                <span class="claim-value">CAR Section 3, Series M, Part IV</span>
+              </div>
+              <div class="claim-field">
+                <span class="claim-label">Entitled Compensation</span>
+                <span class="claim-value good-val">Up to ₹10,000 per passenger</span>
+              </div>
+            </div>
+          </div>
+          <div class="dispatch-actions">
+            <button class="btn-dispatch file-claim"><i data-lucide="send"></i> File Compensation Claim</button>
+            <button class="btn-dispatch edit"><i data-lucide="pencil"></i> Review & Edit</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Rebook Confirmation Modal -->
+  <div class="modal-overlay" id="rebookModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i data-lucide="check-circle-2"></i> Confirm Rebooking</h2>
+        <button class="modal-close" id="modalClose"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-flight-info">
+          <div class="modal-airline">
+            <div class="transport-icon flight-icon"><i data-lucide="plane"></i></div>
+            <div>
+              <strong>Akasa Air QP-1382</strong>
+              <span>BLR T1 → GOI Dabolim</span>
+            </div>
+          </div>
+          <div class="modal-details-grid">
+            <div><span>Departure</span><strong>1:45 PM today</strong></div>
+            <div><span>Arrival</span><strong>4:10 PM</strong></div>
+            <div><span>Passengers</span><strong>2 (1 Senior)</strong></div>
+            <div><span>Extra Cost</span><strong>₹3,100</strong></div>
+          </div>
+        </div>
+        <div class="modal-actions-list">
+          <p class="modal-note"><i data-lucide="info"></i> Upon confirmation, ResQTravel will:</p>
+          <ul>
+            <li><i data-lucide="check"></i> Book Akasa Air QP-1382 and issue e-tickets</li>
+            <li><i data-lucide="check"></i> Cancel original IndiGo 6E-402 and initiate refund (₹2,400)</li>
+            <li><i data-lucide="check"></i> Notify Taj North Goa of updated arrival time</li>
+            <li><i data-lucide="check"></i> Rebook Goa Express train for later departure</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="modalCancel">Cancel</button>
+        <button class="btn-primary confirm-rebook-btn" id="confirmRebook">
+          <i data-lucide="shield-check"></i> Confirm & Rebook All
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Toast -->
+  <div class="toast" id="successToast">
+    <div class="toast-icon"><i data-lucide="check-circle-2"></i></div>
+    <div class="toast-content">
+      <strong>Rebooked Successfully!</strong>
+      <p>Akasa Air QP-1382 confirmed. E-tickets sent to your email.</p>
+    </div>
+    <button class="toast-close" id="toastClose"><i data-lucide="x"></i></button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
