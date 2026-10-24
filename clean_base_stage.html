@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResQTravel — Clean Base Interface</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      background: var(--bg-primary);
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* Clean Empty Panels */
+    .base-dashboard {
+      max-width: 1520px;
+      margin: 0 auto;
+      padding: var(--sp-6);
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: var(--sp-6);
+      min-height: calc(100vh - 64px);
+    }
+
+    .base-panel-left {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-5);
+    }
+
+    .base-panel-right {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-5);
+    }
+
+    /* Subtle Guide Slots for 3D Video Compositing */
+    .wireframe-slot {
+      border: 2px dashed rgba(148, 163, 184, 0.35);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.02);
+      transition: all 0.3s ease;
+    }
+
+    .slot-banner {
+      max-width: 1520px;
+      margin: 24px auto 0;
+      height: 140px;
+      border: 2px dashed rgba(220, 38, 38, 0.25);
+      border-radius: var(--radius-lg);
+      background: rgba(254, 242, 242, 0.3);
+    }
+
+    .slot-ticket { height: 260px; }
+    .slot-timeline { height: 420px; }
+    .slot-constraints { height: 180px; }
+
+    .slot-recovery-header { height: 60px; border-style: none; }
+    .slot-option-1 { height: 320px; border-color: rgba(59, 130, 246, 0.3); background: rgba(239, 246, 255, 0.3); }
+    .slot-option-2 { height: 240px; }
+    .slot-dispatch { height: 260px; }
+
+    /* For Pure Blank Stage (no slots) */
+    .pure-blank .wireframe-slot,
+    .pure-blank .slot-banner {
+      display: none !important;
+    }
+  </style>
+</head>
+<body id="baseBody">
+
+  <!-- TOP NAVIGATION BAR -->
+  <nav class="top-nav" id="topNav">
+    <div class="nav-inner">
+      <div class="nav-brand">
+        <div class="brand-logo">
+          <div class="brand-icon">
+            <i data-lucide="shield-check"></i>
+          </div>
+          <span class="brand-name">Resq<span class="brand-accent">Travel</span></span>
+        </div>
+        <div class="agent-status">
+          <span class="pulse-dot"></span>
+          <span class="status-text">AI Agent Active</span>
+          <span class="status-model">(Gemini 2.5 Flash)</span>
+        </div>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="#" class="nav-link active"><i data-lucide="briefcase"></i> Active Trips</a></li>
+        <li><a href="#" class="nav-link"><i data-lucide="sparkles"></i> Smart Recovery</a></li>
+        <li><a href="#" class="nav-link"><i data-lucide="file-text"></i> Policies</a></li>
+        <li><a href="#" class="nav-link"><i data-lucide="file-check-2"></i> Claims</a></li>
+      </ul>
+
+      <div class="nav-user">
+        <button class="notification-bell" aria-label="Notifications">
+          <i data-lucide="bell"></i>
+          <span class="notif-badge">1</span>
+        </button>
+        <div class="user-avatar">
+          <span>CK</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Optional Wireframe Guides for 3D Video Positioning -->
+  <div class="slot-banner wireframe-slot" id="slotBanner"></div>
+
+  <!-- MAIN DASHBOARD BASE -->
+  <main class="base-dashboard">
+    <div class="base-panel-left">
+      <div class="wireframe-slot slot-ticket"></div>
+      <div class="wireframe-slot slot-timeline"></div>
+      <div class="wireframe-slot slot-constraints"></div>
+    </div>
+
+    <div class="base-panel-right">
+      <div class="wireframe-slot slot-recovery-header"></div>
+      <div class="wireframe-slot slot-option-1"></div>
+      <div class="wireframe-slot slot-option-2"></div>
+      <div class="wireframe-slot slot-dispatch"></div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

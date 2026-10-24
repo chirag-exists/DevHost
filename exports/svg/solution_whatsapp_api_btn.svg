@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 46" width="230" height="46" fill="none">
+  <defs>
+    <filter id="waShadow" x="-10%" y="-15%" width="120%" height="145%">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#25D366" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <style>
+    .wa-text { font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 600; fill: #FFFFFF; }
+  </style>
+  <rect x="4" y="4" width="220" height="36" rx="18" fill="#25D366" filter="url(#waShadow)" />
+  <rect x="4.5" y="4.5" width="219" height="35" rx="17.5" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
+  <!-- Message Circle icon -->
+  <g transform="translate(18, 12)" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+  </g>
+  <text x="46" y="27" class="wa-text">Send via WhatsApp API</text>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 40" width="260" height="40" fill="none">
+  <defs>
+    <filter id="pillShadow" x="-5%" y="-10%" width="110%" height="130%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#15803D" flood-opacity="0.1" />
+    </filter>
+    <filter id="dotGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#22C55E" flood-opacity="0.8" />
+    </filter>
+  </defs>
+  <style>
+    .text-main { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; fill: #15803D; }
+    .text-sub  { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 400; fill: #64748B; }
+  </style>
+  <rect x="2" y="2" width="254" height="34" rx="17" fill="#F0FDF4" stroke="#DCFCE7" stroke-width="1.2" filter="url(#pillShadow)" />
+  <!-- Glowing green dot -->
+  <circle cx="20" cy="19" r="4.5" fill="#22C55E" filter="url(#dotGlow)" />
+  <circle cx="20" cy="19" r="2.5" fill="#FFFFFF" opacity="0.6" />
+  <text x="34" y="24" class="text-main">AI Agent Active <tspan class="text-sub">(Gemini 2.5 Flash)</tspan></text>
+</svg>

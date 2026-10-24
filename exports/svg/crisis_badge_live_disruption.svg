@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 40" width="240" height="40" fill="none">
+  <defs>
+    <filter id="badgeShadow" x="-10%" y="-15%" width="120%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#DC2626" flood-opacity="0.3" />
+    </filter>
+  </defs>
+  <style>
+    .badge-text { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; fill: #FFFFFF; letter-spacing: 0.01em; }
+  </style>
+  <rect x="3" y="3" width="232" height="32" rx="16" fill="#DC2626" filter="url(#badgeShadow)" />
+  <!-- Zap icon -->
+  <g transform="translate(18, 9)" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <polygon points="11 1 2 12 9 12 8 19 17 8 10 8 11 1" />
+  </g>
+  <text x="44" y="24" class="badge-text">Live Disruption Detected</text>
+</svg>

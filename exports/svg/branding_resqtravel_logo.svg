@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" width="320" height="64" fill="none">
+  <defs>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1D4ED8" />
+      <stop offset="100%" stop-color="#0D9488" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.12" />
+    </filter>
+  </defs>
+  <style>
+    .brand-text { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 32px; font-weight: 800; letter-spacing: -0.02em; }
+  </style>
+  <g transform="translate(4, 10)" filter="url(#shadow)">
+    <rect width="44" height="44" rx="12" fill="url(#brandGrad)" />
+    <!-- Lucide shield-check icon -->
+    <g transform="translate(10, 10)" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      <path d="m9 12 2 2 4-4" />
+    </g>
+  </g>
+  <text x="60" y="42" class="brand-text" fill="#0F172A">Resq<tspan fill="#1D4ED8">Travel</tspan></text>
+</svg>

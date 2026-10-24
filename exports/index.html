@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResQTravel — 3D Video Asset Export Kit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    :root {
+      --bg: #0B0F19;
+      --surface: #111827;
+      --surface-border: #1F2937;
+      --card-bg: #162032;
+      --card-border: #243247;
+      --text: #F3F4F6;
+      --text-muted: #9CA3AF;
+      --accent: #3B82F6;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --red: #EF4444;
+      --amber: #F59E0B;
+      --green: #10B981;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 0 0 80px;
+    }
+
+    /* ─── Header ─── */
+    header {
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--surface-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #1D4ED8, #0D9488);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 0 16px rgba(29, 78, 216, 0.4);
+    }
+
+    .header-brand h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .header-brand span.subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: block;
+      font-weight: 500;
+    }
+
+    /* Background Switcher Controls */
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bg-switcher-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .bg-btn-group {
+      display: flex;
+      background: #0D1321;
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .bg-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .bg-btn.active {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    /* ─── Hero Overview ─── */
+    .hero {
+      max-width: 1440px;
+      margin: 32px auto 24px;
+      padding: 0 32px;
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, #162032 0%, #0F172A 100%);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .hero-info h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      background: linear-gradient(90deg, #FFFFFF, #93C5FD);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-info p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      max-width: 680px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      background: rgba(17, 24, 39, 0.7);
+      border: 1px solid var(--surface-border);
+      border-radius: 10px;
+      padding: 10px 18px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #60A5FA;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .stat-lbl {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── Category Filter Tabs ─── */
+    .tabs-wrapper {
+      max-width: 1440px;
+      margin: 0 auto 28px;
+      padding: 0 32px;
+    }
+
+    .category-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--surface-border);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 10px 18px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active {
+      color: #93C5FD;
+      border-bottom-color: var(--accent);
+    }
+
+    .tab-count {
+      background: rgba(59, 130, 246, 0.15);
+      color: #93C5FD;
+      padding: 2px 7px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+    }
+
+    /* ─── Asset Grid ─── */
+    .gallery {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+      gap: 24px;
+    }
+
+    .gallery.full-width-card {
+      grid-column: 1 / -1;
+    }
+
+    .asset-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .asset-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -8px rgba(0,0,0,0.5);
+      border-color: #384F70;
+    }
+
+    .asset-card.span-2 {
+      grid-column: span 2;
+    }
+
+    @media (max-width: 900px) {
+      .asset-card.span-2 { grid-column: span 1; }
+      .gallery { grid-template-columns: 1fr; }
+    }
+
+    /* Preview Canvas Area */
+    .preview-canvas {
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.25s ease;
+    }
+
+    .preview-canvas.tall {
+      height: 320px;
+    }
+
+    .preview-canvas.extra-tall {
+      height: 400px;
+    }
+
+    .preview-canvas img {
+      max-width: 92%;
+      max-height: 90%;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15));
+      transition: transform 0.2s ease;
+    }
+
+    .preview-canvas:hover img {
+      transform: scale(1.03);
+    }
+
+    /* Checkered & Solid Background Themes */
+    .theme-checker-dark {
+      background-color: #121824;
+      background-image: linear-gradient(45deg, #182030 25%, transparent 25%),
+                        linear-gradient(-45deg, #182030 25%, transparent 25%),
+                        linear-gradient(45deg, transparent 75%, #182030 75%),
+                        linear-gradient(-45deg, transparent 75%, #182030 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+
+    .theme-checker-light {
+      background-color: #E2E8F0;
+      background-image: linear-gradient(45deg, #CBD5E1 25%, transparent 25%),
+                        linear-gradient(-45deg, #CBD5E1 25%, transparent 25%),
+                        linear-gradient(45deg, transparent 75%, #CBD5E1 75%),
+                        linear-gradient(-45deg, transparent 75%, #CBD5E1 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+
+    .theme-dark {
+      background: #0B0F19;
+    }
+
+    .theme-white {
+      background: #FFFFFF;
+    }
+
+    /* Card Details Footer */
+    .asset-meta {
+      padding: 16px 20px;
+      background: #111A29;
+      border-top: 1px solid var(--card-border);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .meta-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .meta-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+
+    .meta-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-png { background: rgba(59, 130, 246, 0.2); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.4); }
+    .badge-svg { background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.4); }
+
+    .meta-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .meta-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      gap: 8px;
+    }
+
+    .meta-dims {
+      font-size: 0.75rem;
+      color: #94A3B8;
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .meta-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-action {
+      background: #1E293B;
+      border: 1px solid #334155;
+      color: #E2E8F0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-action:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    /* ─── 3D Compositing Guidelines Section ─── */
+    .guidelines {
+      max-width: 1440px;
+      margin: 48px auto 0;
+      padding: 0 32px;
+    }
+
+    .guide-card {
+      background: #131D2D;
+      border: 1px solid #1E2D44;
+      border-radius: var(--radius);
+      padding: 28px 32px;
+    }
+
+    .guide-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .guide-box {
+      background: #0D1420;
+      border: 1px solid #182335;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .guide-box h4 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #60A5FA;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .guide-box p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .guide-box code {
+      background: #162032;
+      color: #FBBF24;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header>
+    <div class="header-inner">
+      <div class="header-brand">
+        <div class="brand-icon-box">
+          <i data-lucide="shield-check"></i>
+        </div>
+        <div>
+          <h1>ResQTravel <span style="color:#60A5FA; font-weight:400;">— 3D Asset Kit</span></h1>
+          <span class="subtitle">High-Resolution Transparent PNGs &amp; SVGs for 3D Video Motion Graphics</span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <span class="bg-switcher-label">Preview Canvas:</span>
+        <div class="bg-btn-group">
+          <button class="bg-btn active" data-theme="theme-checker-dark" id="btnCheckDark">
+            <i data-lucide="grid"></i> Checker Dark
+          </button>
+          <button class="bg-btn" data-theme="theme-checker-light" id="btnCheckLight">
+            <i data-lucide="grid"></i> Checker Light
+          </button>
+          <button class="bg-btn" data-theme="theme-dark" id="btnDark">
+            <i data-lucide="moon"></i> Midnight
+          </button>
+          <button class="bg-btn" data-theme="theme-white" id="btnWhite">
+            <i data-lucide="sun"></i> White
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Overview -->
+  <section class="hero">
+    <div class="hero-card">
+      <div class="hero-info">
+        <h2>Production-Ready 3D Compositing Assets</h2>
+        <p>
+          Every asset is rendered at <strong>3x Retina/4K density</strong> with pure RGBA alpha transparency. Soft drop-shadows and glowing accents are cleanly preserved with anti-aliased padding for seamless compositing in Blender, After Effects, and Premiere Pro.
+        </p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <div class="stat-val">22</div>
+          <div class="stat-lbl">High-Res PNGs</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-val">7</div>
+          <div class="stat-lbl">Scalable SVGs</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-val">4K</div>
+          <div class="stat-lbl">Base Canvas</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category Filter Tabs -->
+  <nav class="tabs-wrapper">
+    <div class="category-tabs" id="categoryTabs">
+      <button class="tab-btn active" data-cat="all">All Elements <span class="tab-count">29</span></button>
+      <button class="tab-btn" data-cat="crisis">Crisis Elements <span class="tab-count">7</span></button>
+      <button class="tab-btn" data-cat="ai_input">AI &amp; Input <span class="tab-count">8</span></button>
+      <button class="tab-btn" data-cat="solution">Solution Elements <span class="tab-count">6</span></button>
+      <button class="tab-btn" data-cat="branding_base">Branding &amp; Base Layer <span class="tab-count">8</span></button>
+    </div>
+  </nav>
+
+  <!-- Asset Gallery -->
+  <main class="gallery" id="assetGallery">
+
+    <!-- ═════════ CRISIS ELEMENTS ═════════ -->
+
+    <!-- Crisis Banner Floating -->
+    <div class="asset-card span-2" data-category="crisis">
+      <div class="preview-canvas theme-checker-dark" style="height: 280px;">
+        <img src="crisis/crisis_disruption_banner.png" alt="Live Disruption Detected Banner" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Red "Live Disruption Detected" Banner (Floating Card)</div>
+            <p class="meta-desc">Full alert hero card with pulsing siren icon, red accent stripe, flight details, and 3 downstream impact chips.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 3600 × 834 px</span>
+          <div class="meta-actions">
+            <a href="crisis/crisis_disruption_banner.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="crisis/crisis_disruption_banner.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Disruption Badge -->
+    <div class="asset-card" data-category="crisis">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="crisis/crisis_badge_live_disruption.png" alt="Live Disruption Badge Pill" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">"Live Disruption Detected" Badge Pill</div>
+            <p class="meta-desc">Crimson pill badge with lightning bolt zap icon and soft shadow.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 761 × 180 px</span>
+          <div class="meta-actions">
+            <a href="crisis/crisis_badge_live_disruption.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="crisis/crisis_badge_live_disruption.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Disruption Badge SVG -->
+    <div class="asset-card" data-category="crisis">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="svg/crisis_badge_live_disruption.svg" alt="Live Disruption Badge SVG" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Live Disruption Badge (Vector SVG)</div>
+            <p class="meta-desc">Infinite-resolution SVG with embedded styling for close-up 3D camera fly-bys.</p>
+          </div>
+          <span class="meta-badge badge-svg">VECTOR SVG</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="sparkles"></i> Scalable Vector</span>
+          <div class="meta-actions">
+            <a href="svg/crisis_badge_live_disruption.svg" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="svg/crisis_badge_live_disruption.svg" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leg 1 Flight Card (Standalone) -->
+    <div class="asset-card" data-category="crisis">
+      <div class="preview-canvas tall theme-checker-dark">
+        <img src="crisis/crisis_leg1_flight_card.png" alt="Leg 1 Flight Card" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">"Leg 1 — Flight" Timeline Card (Red)</div>
+            <p class="meta-desc">IndiGo 6E-402 card with red left stripe, Delayed 6h tag, departure &amp; arrival strikethrough, and new arrival time.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 1316 × 752 px</span>
+          <div class="meta-actions">
+            <a href="crisis/crisis_leg1_flight_card.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="crisis/crisis_leg1_flight_card.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leg 1 Flight Card (With Connector) -->
+    <div class="asset-card" data-category="crisis">
+      <div class="preview-canvas tall theme-checker-dark">
+        <img src="crisis/crisis_leg1_flight_with_connector.png" alt="Leg 1 Flight With Connector" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">"Leg 1 — Flight" with Timeline Connector</div>
+            <p class="meta-desc">Includes the glowing crimson plane connector node and vertical dashed connector line.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 1462 × 752 px</span>
+          <div class="meta-actions">
+            <a href="crisis/crisis_leg1_flight_with_connector.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="crisis/crisis_leg1_flight_with_connector.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leg 2 Train Card (Standalone) -->
+    <div class="asset-card" data-category="crisis">
+      <div class="preview-canvas tall theme-checker-dark">
+        <img src="crisis/crisis_leg2_train_card.png" alt="Leg 2 Train Card" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">"Leg 2 — Train" Timeline Card (Yellow/Amber)</div>
+            <p class="meta-desc">Goa Express train card with Connection Broken badge, MAO → THVM route, and Will Be Missed warning status.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 1316 × 614 px</span>
+          <div class="meta-actions">
+            <a href="crisis/crisis_leg2_train_card.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="crisis/crisis_leg2_train_card.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leg 2 Train Card (With Connector) -->
+    <div class="asset-card" data-category="crisis">
+      <div class="preview-canvas tall theme-checker-dark">
+        <img src="crisis/crisis_leg2_train_with_connector.png" alt="Leg 2 Train With Connector" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">"Leg 2 — Train" with Timeline Connector</div>
+            <p class="meta-desc">Includes the amber train connector node and broken timeline dashed track.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 1462 × 617 px</span>
+          <div class="meta-actions">
+            <a href="crisis/crisis_leg2_train_with_connector.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="crisis/crisis_leg2_train_with_connector.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════ AI & INPUT ELEMENTS ═════════ -->
+
+    <!-- Ticket Ingestion Zone -->
+    <div class="asset-card" data-category="ai_input">
+      <div class="preview-canvas tall theme-checker-dark">
+        <img src="ai_input/ai_ticket_ingestion_card.png" alt="Ticket Ingestion Drop Zone" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">"Ticket Ingestion" Drag-and-Drop Zone</div>
+            <p class="meta-desc">Card with Gemini Multimodal OCR badge, dashed drop area, upload cloud icon, and parsed PNR/boarding pass tags.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 1316 × 1031 px</span>
+          <div class="meta-actions">
+            <a href="ai_input/ai_ticket_ingestion_card.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="ai_input/ai_ticket_ingestion_card.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Green AI Agent Active Pill -->
+    <div class="asset-card" data-category="ai_input">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="ai_input/ai_agent_active_pill.png" alt="AI Agent Active Pill" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Green "AI Agent Active" Top Nav Pill</div>
+            <p class="meta-desc">Glowing green pulse node, "AI Agent Active", and "(Gemini 2.5 Flash)" model subtitle.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 834 × 156 px</span>
+          <div class="meta-actions">
+            <a href="ai_input/ai_agent_active_pill.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="ai_input/ai_agent_active_pill.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Green AI Agent Active Pill SVG -->
+    <div class="asset-card" data-category="ai_input">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="svg/ai_agent_active_pill.svg" alt="AI Agent Active Pill SVG" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">AI Agent Active Pill (Vector SVG)</div>
+            <p class="meta-desc">Pure vector SVG with luminous green drop-glow filter and sharp typography.</p>
+          </div>
+          <span class="meta-badge badge-svg">VECTOR SVG</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="sparkles"></i> Scalable Vector</span>
+          <div class="meta-actions">
+            <a href="svg/ai_agent_active_pill.svg" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="svg/ai_agent_active_pill.svg" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Constraint Pills Group -->
+    <div class="asset-card span-2" data-category="ai_input">
+      <div class="preview-canvas theme-checker-dark" style="height: 180px;">
+        <img src="ai_input/ai_constraint_pills_group.png" alt="Constraint Pills Group" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Constraint Pills Strip (Grouped)</div>
+            <p class="meta-desc">Combined cluster containing: "Senior citizen", "Budget &lt; ₹3,000", "Arrive before 9:00 PM", and "No overnight buses".</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 2288 × 161 px</span>
+          <div class="meta-actions">
+            <a href="ai_input/ai_constraint_pills_group.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="ai_input/ai_constraint_pills_group.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Constraint Pills SVG -->
+    <div class="asset-card span-2" data-category="ai_input">
+      <div class="preview-canvas theme-checker-dark" style="height: 180px;">
+        <img src="svg/ai_constraint_pills.svg" alt="Constraint Pills SVG" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Constraint Pills (Vector SVG)</div>
+            <p class="meta-desc">Vector SVG containing Senior citizen, Budget &lt; ₹3,000, and Arrive before 9:00 PM pills.</p>
+          </div>
+          <span class="meta-badge badge-svg">VECTOR SVG</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="sparkles"></i> Scalable Vector</span>
+          <div class="meta-actions">
+            <a href="svg/ai_constraint_pills.svg" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="svg/ai_constraint_pills.svg" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Individual Pill: Senior Citizen -->
+    <div class="asset-card" data-category="ai_input">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="ai_input/ai_constraint_pill_senior_citizen.png" alt="Senior Citizen Pill" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Constraint Pill: "Senior citizen"</div>
+            <p class="meta-desc">Isolated individual pill with heart-pulse icon and remove cross.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 540 × 168 px</span>
+          <div class="meta-actions">
+            <a href="ai_input/ai_constraint_pill_senior_citizen.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="ai_input/ai_constraint_pill_senior_citizen.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Individual Pill: Budget -->
+    <div class="asset-card" data-category="ai_input">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="ai_input/ai_constraint_pill_budget.png" alt="Budget Pill" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Constraint Pill: "Budget &lt; ₹3,000"</div>
+            <p class="meta-desc">Isolated individual pill with Indian Rupee symbol icon and remove cross.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 600 × 168 px</span>
+          <div class="meta-actions">
+            <a href="ai_input/ai_constraint_pill_budget.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="ai_input/ai_constraint_pill_budget.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Individual Pill: Arrive before 9 PM -->
+    <div class="asset-card" data-category="ai_input">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="ai_input/ai_constraint_pill_arrive_time.png" alt="Arrive Before 9 PM Pill" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Constraint Pill: "Arrive before 9:00 PM"</div>
+            <p class="meta-desc">Isolated individual pill with clock-3 icon and remove cross.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 714 × 171 px</span>
+          <div class="meta-actions">
+            <a href="ai_input/ai_constraint_pill_arrive_time.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="ai_input/ai_constraint_pill_arrive_time.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════ SOLUTION ELEMENTS ═════════ -->
+
+    <!-- Akasa Air Recommendation Card -->
+    <div class="asset-card span-2" data-category="solution">
+      <div class="preview-canvas extra-tall theme-checker-dark">
+        <img src="solution/solution_akasa_recommendation_card.png" alt="Akasa Air Recommendation Card" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">"Akasa Air QP-1382" Recommendation Card (AI Pick)</div>
+            <p class="meta-desc">Flagship card featuring "AI Pick — Recommended" ribbon, 96 Match circular progress ring, 4-stat grid, 3 save badges, Gemini Reasoning text, and action buttons.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 1740 × 1413 px</span>
+          <div class="meta-actions">
+            <a href="solution/solution_akasa_recommendation_card.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="solution/solution_akasa_recommendation_card.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auto-Drafted Hotel Hold Message Card -->
+    <div class="asset-card span-2" data-category="solution">
+      <div class="preview-canvas tall theme-checker-dark">
+        <img src="solution/solution_hotel_hold_card.png" alt="Hotel Hold Dispatch Card" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">"Auto-Drafted Hotel Hold Message" Card</div>
+            <p class="meta-desc">Auto-pilot dispatch card with Taj North Goa address, Pending status tag, auto-drafted hold message textarea, and multi-channel dispatch buttons.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 1684 × 994 px</span>
+          <div class="meta-actions">
+            <a href="solution/solution_hotel_hold_card.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="solution/solution_hotel_hold_card.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blue 1-Click Rebook Button PNG -->
+    <div class="asset-card" data-category="solution">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="solution/solution_1click_rebook_btn.png" alt="1-Click Rebook Button" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Blue "1-Click Rebook" Button</div>
+            <p class="meta-desc">Primary action button with blue gradient, lightning zap icon, and indigo drop-shadow glow.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 703 × 276 px</span>
+          <div class="meta-actions">
+            <a href="solution/solution_1click_rebook_btn.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="solution/solution_1click_rebook_btn.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blue 1-Click Rebook Button SVG -->
+    <div class="asset-card" data-category="solution">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="svg/solution_1click_rebook_btn.svg" alt="1-Click Rebook Button SVG" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">1-Click Rebook Button (Vector SVG)</div>
+            <p class="meta-desc">Pure vector SVG with embedded indigo gradient and drop-shadow filter.</p>
+          </div>
+          <span class="meta-badge badge-svg">VECTOR SVG</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="sparkles"></i> Scalable Vector</span>
+          <div class="meta-actions">
+            <a href="svg/solution_1click_rebook_btn.svg" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="svg/solution_1click_rebook_btn.svg" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Green WhatsApp Button PNG -->
+    <div class="asset-card" data-category="solution">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="solution/solution_whatsapp_api_btn.png" alt="WhatsApp Button" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Green "Send via WhatsApp API" Button</div>
+            <p class="meta-desc">Official WhatsApp green (#25D366) action button with chat icon and soft ambient shadow.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 835 × 270 px</span>
+          <div class="meta-actions">
+            <a href="solution/solution_whatsapp_api_btn.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="solution/solution_whatsapp_api_btn.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Green WhatsApp Button SVG -->
+    <div class="asset-card" data-category="solution">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="svg/solution_whatsapp_api_btn.svg" alt="WhatsApp Button SVG" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Send via WhatsApp Button (Vector SVG)</div>
+            <p class="meta-desc">Pure vector SVG with official WhatsApp brand palette and embedded vector icon.</p>
+          </div>
+          <span class="meta-badge badge-svg">VECTOR SVG</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="sparkles"></i> Scalable Vector</span>
+          <div class="meta-actions">
+            <a href="svg/solution_whatsapp_api_btn.svg" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="svg/solution_whatsapp_api_btn.svg" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════ BRANDING & BASE LAYER ═════════ -->
+
+    <!-- Primary Logo PNG -->
+    <div class="asset-card" data-category="branding_base">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="branding_base/branding_resqtravel_logo.png" alt="Primary ResqTravel Logo" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Primary ResqTravel Logo (Horizontal)</div>
+            <p class="meta-desc">Shield-check gradient icon mark paired with bold "ResqTravel" typography.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 642 × 182 px</span>
+          <div class="meta-actions">
+            <a href="branding_base/branding_resqtravel_logo.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="branding_base/branding_resqtravel_logo.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Primary Logo SVG -->
+    <div class="asset-card" data-category="branding_base">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="svg/branding_resqtravel_logo.svg" alt="Primary ResqTravel Logo SVG" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Primary ResqTravel Logo (Vector SVG)</div>
+            <p class="meta-desc">Standalone vector logo with embedded gradient definition and drop shadow.</p>
+          </div>
+          <span class="meta-badge badge-svg">VECTOR SVG</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="sparkles"></i> Scalable Vector</span>
+          <div class="meta-actions">
+            <a href="svg/branding_resqtravel_logo.svg" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="svg/branding_resqtravel_logo.svg" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shield Icon PNG -->
+    <div class="asset-card" data-category="branding_base">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="branding_base/branding_resqtravel_icon.png" alt="ResqTravel App Icon" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">ResqTravel App Icon Mark</div>
+            <p class="meta-desc">Gradient squircle badge with verified shield-check glyph for app icon use.</p>
+          </div>
+          <span class="meta-badge badge-png">PNG • RGBA</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 200 × 200 px</span>
+          <div class="meta-actions">
+            <a href="branding_base/branding_resqtravel_icon.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="branding_base/branding_resqtravel_icon.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shield Icon SVG -->
+    <div class="asset-card" data-category="branding_base">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="svg/branding_resqtravel_icon.svg" alt="ResqTravel App Icon SVG" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">ResqTravel App Icon (Vector SVG)</div>
+            <p class="meta-desc">Scalable vector app icon mark with indigo-to-teal diagonal gradient.</p>
+          </div>
+          <span class="meta-badge badge-svg">VECTOR SVG</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="sparkles"></i> Scalable Vector</span>
+          <div class="meta-actions">
+            <a href="svg/branding_resqtravel_icon.svg" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="svg/branding_resqtravel_icon.svg" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clean Base App Interface (Pure Canvas 4K) -->
+    <div class="asset-card span-2" data-category="branding_base">
+      <div class="preview-canvas tall theme-checker-dark">
+        <img src="branding_base/clean_base_app_interface_pure_4k.png" alt="Clean Base App Interface 4K" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Clean Base App Interface — Pure Blank Stage (4K UHD)</div>
+            <p class="meta-desc">Full application backdrop with top navigation bar, links, avatar, and empty slate canvas — zero floating cards, text, or alerts. Perfect 3D plane backdrop.</p>
+          </div>
+          <span class="meta-badge badge-png">4K ULTRA HD</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 3840 × 2160 px</span>
+          <div class="meta-actions">
+            <a href="branding_base/clean_base_app_interface_pure_4k.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="branding_base/clean_base_app_interface_pure_4k.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clean Base App Interface (Guides 4K) -->
+    <div class="asset-card span-2" data-category="branding_base">
+      <div class="preview-canvas tall theme-checker-dark">
+        <img src="branding_base/clean_base_app_interface_guides_4k.png" alt="Clean Base App Interface with Guides 4K" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Clean Base App Interface — With Wireframe Guides (4K UHD)</div>
+            <p class="meta-desc">Includes subtle translucent placement outlines indicating where each 3D card lands in the dashboard grid during motion graphics animation.</p>
+          </div>
+          <span class="meta-badge badge-png">4K ULTRA HD</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 3840 × 2325 px</span>
+          <div class="meta-actions">
+            <a href="branding_base/clean_base_app_interface_guides_4k.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="branding_base/clean_base_app_interface_guides_4k.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clean Base App Interface 1080p Pure -->
+    <div class="asset-card" data-category="branding_base">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="branding_base/clean_base_app_interface_pure_1080p.png" alt="Clean Base App Interface 1080p" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Clean Base App Interface (1080p Full HD)</div>
+            <p class="meta-desc">Standard 1920×1080 full-page canvas for quick timeline previews.</p>
+          </div>
+          <span class="meta-badge badge-png">1080P FULL HD</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 1920 × 1080 px</span>
+          <div class="meta-actions">
+            <a href="branding_base/clean_base_app_interface_pure_1080p.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="branding_base/clean_base_app_interface_pure_1080p.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clean Base App Interface 1080p Guides -->
+    <div class="asset-card" data-category="branding_base">
+      <div class="preview-canvas theme-checker-dark">
+        <img src="branding_base/clean_base_app_interface_guides_1080p.png" alt="Clean Base App Interface Guides 1080p" />
+      </div>
+      <div class="asset-meta">
+        <div class="meta-header">
+          <div>
+            <div class="meta-title">Clean Base Interface with Guides (1080p)</div>
+            <p class="meta-desc">Full HD 1080p version with dashed wireframe drop zones.</p>
+          </div>
+          <span class="meta-badge badge-png">1080P FULL HD</span>
+        </div>
+        <div class="meta-footer">
+          <span class="meta-dims"><i data-lucide="maximize-2"></i> 1920 × 1245 px</span>
+          <div class="meta-actions">
+            <a href="branding_base/clean_base_app_interface_guides_1080p.png" target="_blank" class="btn-action"><i data-lucide="eye"></i> View</a>
+            <a href="branding_base/clean_base_app_interface_guides_1080p.png" download class="btn-action"><i data-lucide="download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 3D Compositing Guidelines Section -->
+  <section class="guidelines">
+    <div class="guide-card">
+      <h3><i data-lucide="layers" style="color:#60A5FA;"></i> 3D Video Compositing Recommendations</h3>
+      <div class="guide-grid">
+        <div class="guide-box">
+          <h4><i data-lucide="sparkles"></i> Alpha Interpretation</h4>
+          <p>
+            All PNG assets use <strong>Straight (Unmatted) Alpha</strong>. When importing into After Effects or Blender, select <code>Straight - Unmatted</code> to avoid dark fringe outlines around shadows and glowing edges.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h4><i data-lucide="box"></i> 3D Depth Layering (Z-Space)</h4>
+          <p>
+            Base interface: <code>Z = 0</code><br />
+            Leg 1 &amp; Leg 2 timeline cards: <code>Z = -40px</code><br />
+            Akasa recommendation card: <code>Z = -80px</code><br />
+            1-Click Rebook button: <code>Z = -120px</code> (casts soft shadow on card)<br />
+            Disruption Banner: Fly in from <code>Z = -300px</code> with 15° X-rotation.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h4><i data-lucide="camera"></i> Camera &amp; Depth of Field</h4>
+          <p>
+            Use a <strong>50mm or 85mm virtual lens</strong> with subtle Depth of Field (f/2.8) to focus on the <em>Akasa Air QP-1382</em> recommendation card while letting the background canvas gently blur.
+          </p>
+        </div>
+        <div class="guide-box">
+          <h4><i data-lucide="code"></i> Vector SVGs in 3D</h4>
+          <p>
+            SVGs can be imported directly into Blender or Cinema 4D as vector splines/curves to generate 3D extruded geometry with bevels for the <strong>ResqTravel Shield Logo</strong> and action buttons.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+
+      // Background Switcher
+      const bgButtons = document.querySelectorAll('.bg-btn');
+      const canvases = document.querySelectorAll('.preview-canvas');
+
+      bgButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          bgButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const newTheme = btn.getAttribute('data-theme');
+          canvases.forEach(c => {
+            c.classList.remove('theme-checker-dark', 'theme-checker-light', 'theme-dark', 'theme-white');
+            c.classList.add(newTheme);
+          });
+        });
+      });
+
+      // Category Filter Tabs
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const cards = document.querySelectorAll('.asset-card');
+
+      tabButtons.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabButtons.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+
+          const category = tab.getAttribute('data-cat');
+          cards.forEach(card => {
+            if (category === 'all' || card.getAttribute('data-category') === category) {
+              card.style.display = 'flex';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

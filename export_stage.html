@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResQTravel — Component Export Stage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Export Stage Overrides: Ensure root & stage backgrounds are transparent */
+    html, body {
+      background: transparent !important;
+      margin: 0;
+      padding: 0;
+      min-height: auto;
+    }
+
+    .export-stage {
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+      padding: 60px;
+      background: transparent !important;
+    }
+
+    .export-box {
+      display: inline-flex;
+      padding: 30px;
+      background: transparent !important;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Isolated components width containment */
+    .export-box-banner {
+      width: 1200px;
+      max-width: 1200px;
+    }
+
+    .export-box-card {
+      width: 460px;
+    }
+
+    .export-box-card-wide {
+      width: 580px;
+    }
+
+    .floating-banner-card {
+      width: 100%;
+      background: linear-gradient(135deg, var(--crimson-50) 0%, var(--amber-50) 100%);
+      border: 1px solid var(--amber-100);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl), 0 0 25px rgba(220, 38, 38, 0.12);
+      overflow: hidden;
+      display: flex;
+    }
+
+    /* Remove animations and ensure full opacity for static export */
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+    .card, .option-card, .dispatch-section, .recovery-header, .hero-alert {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .pulse-dot {
+      opacity: 1 !important;
+      transform: scale(1) !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="export-stage">
+
+    <!-- ═════════ 1. BRANDING: PRIMARY LOGO ═════════ -->
+    <div class="export-box" id="stage-logo">
+      <div class="brand-logo" style="transform: scale(1.3); transform-origin: left center;">
+        <div class="brand-icon">
+          <i data-lucide="shield-check"></i>
+        </div>
+        <span class="brand-name">Resq<span class="brand-accent">Travel</span></span>
+      </div>
+    </div>
+
+    <!-- Standalone Brand Icon -->
+    <div class="export-box" id="stage-brand-icon">
+      <div class="brand-icon" style="width: 56px; height: 56px; border-radius: var(--radius-lg);">
+        <i data-lucide="shield-check" style="width: 32px; height: 32px;"></i>
+      </div>
+    </div>
+
+    <!-- ═════════ 2. CRISIS: HERO ALERT BANNER (FLOATING) ═════════ -->
+    <div class="export-box export-box-banner" id="stage-crisis-banner">
+      <div class="floating-banner-card">
+        <div class="alert-stripe" style="width: 8px;"></div>
+        <div class="alert-body" style="padding: 24px 28px;">
+          <div class="alert-top-row">
+            <div class="alert-icon-box" style="width: 48px; height: 48px;">
+              <i data-lucide="siren" style="width: 24px; height: 24px;"></i>
+            </div>
+            <div class="alert-main-text">
+              <div class="alert-label">
+                <span class="alert-badge critical-badge" style="padding: 4px 12px; font-size: 13px;">
+                  <i data-lucide="zap"></i> Live Disruption Detected
+                </span>
+                <span class="alert-time-ago" style="font-size: 13px;">Detected 4 min ago</span>
+              </div>
+              <h1 class="alert-headline" style="font-size: 24px; margin-top: 6px;">
+                IndiGo 6E-402 <span class="route-tag">BLR → GOI</span> — Delayed by <span class="highlight-red">6 hours</span>
+              </h1>
+            </div>
+          </div>
+          <div class="alert-impacts" style="margin-top: 18px; gap: 10px;">
+            <div class="impact-chip danger" style="padding: 7px 16px; font-size: 13px;">
+              <i data-lucide="alert-triangle"></i>
+              <span>Missed Connection: <strong>Goa Express Train</strong> at 4:30 PM</span>
+            </div>
+            <div class="impact-chip warning" style="padding: 7px 16px; font-size: 13px;">
+              <i data-lucide="clock-alert"></i>
+              <span>Hotel Late Check-in Penalty Risk: <strong>Taj Resort, North Goa</strong></span>
+            </div>
+            <div class="impact-chip info" style="padding: 7px 16px; font-size: 13px;">
+              <i data-lucide="bot"></i>
+              <span>AI Recovery Agent has identified <strong>3 alternate routes</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Standalone Live Disruption Badge Pill -->
+    <div class="export-box" id="stage-crisis-badge">
+      <span class="alert-badge critical-badge" style="padding: 8px 18px; font-size: 15px; box-shadow: var(--shadow-md);">
+        <i data-lucide="zap" style="width: 16px; height: 16px;"></i> Live Disruption Detected
+      </span>
+    </div>
+
+    <!-- ═════════ 3. CRISIS: LEG 1 FLIGHT CARD ═════════ -->
+    <div class="export-box export-box-card" id="stage-leg1-card">
+      <div class="leg-card disrupted-card" style="width: 100%; margin: 0; background: var(--white); box-shadow: var(--shadow-lg);">
+        <div class="leg-header">
+          <div class="leg-title-row">
+            <span class="leg-label">Leg 1 — Flight</span>
+            <span class="leg-badge badge-disrupted"><i data-lucide="alert-circle"></i> Delayed 6h</span>
+          </div>
+          <h3 class="leg-name">IndiGo 6E-402</h3>
+          <div class="leg-route">
+            <span class="station">BLR <small>Bengaluru</small></span>
+            <span class="route-arrow"><i data-lucide="arrow-right"></i></span>
+            <span class="station">GOI <small>Goa</small></span>
+          </div>
+        </div>
+        <div class="leg-details">
+          <div class="detail-item">
+            <span class="detail-label">Original Departure</span>
+            <span class="detail-value strikethrough">11:00 AM</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Original Arrival</span>
+            <span class="detail-value strikethrough">12:30 PM</span>
+          </div>
+          <div class="detail-item highlight-bad">
+            <span class="detail-label">New Est. Arrival</span>
+            <span class="detail-value new-time">6:30 PM</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Terminal</span>
+            <span class="detail-value">T1 — Gate 14B</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leg 1 Flight Card with Timeline Connector -->
+    <div class="export-box" style="width: 520px;" id="stage-leg1-with-connector">
+      <div class="timeline-leg disrupted" style="width: 100%;">
+        <div class="timeline-connector">
+          <div class="connector-dot disrupted-dot">
+            <i data-lucide="plane"></i>
+          </div>
+          <div class="connector-line disrupted-line" style="min-height: 100px;"></div>
+        </div>
+        <div class="leg-card disrupted-card" style="flex: 1; margin: 0; background: var(--white); box-shadow: var(--shadow-lg);">
+          <div class="leg-header">
+            <div class="leg-title-row">
+              <span class="leg-label">Leg 1 — Flight</span>
+              <span class="leg-badge badge-disrupted"><i data-lucide="alert-circle"></i> Delayed 6h</span>
+            </div>
+            <h3 class="leg-name">IndiGo 6E-402</h3>
+            <div class="leg-route">
+              <span class="station">BLR <small>Bengaluru</small></span>
+              <span class="route-arrow"><i data-lucide="arrow-right"></i></span>
+              <span class="station">GOI <small>Goa</small></span>
+            </div>
+          </div>
+          <div class="leg-details">
+            <div class="detail-item">
+              <span class="detail-label">Original Departure</span>
+              <span class="detail-value strikethrough">11:00 AM</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Original Arrival</span>
+              <span class="detail-value strikethrough">12:30 PM</span>
+            </div>
+            <div class="detail-item highlight-bad">
+              <span class="detail-label">New Est. Arrival</span>
+              <span class="detail-value new-time">6:30 PM</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Terminal</span>
+              <span class="detail-value">T1 — Gate 14B</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════ 4. CRISIS: LEG 2 TRAIN CARD ═════════ -->
+    <div class="export-box export-box-card" id="stage-leg2-card">
+      <div class="leg-card broken-card" style="width: 100%; margin: 0; background: var(--white); box-shadow: var(--shadow-lg);">
+        <div class="leg-header">
+          <div class="leg-title-row">
+            <span class="leg-label">Leg 2 — Train</span>
+            <span class="leg-badge badge-broken"><i data-lucide="unlink"></i> Connection Broken</span>
+          </div>
+          <h3 class="leg-name">Goa Express (12779)</h3>
+          <div class="leg-route">
+            <span class="station">MAO <small>Madgaon Jn.</small></span>
+            <span class="route-arrow"><i data-lucide="arrow-right"></i></span>
+            <span class="station">THVM <small>Thivim</small></span>
+          </div>
+        </div>
+        <div class="leg-details">
+          <div class="detail-item">
+            <span class="detail-label">Scheduled Departure</span>
+            <span class="detail-value">4:30 PM</span>
+          </div>
+          <div class="detail-item highlight-bad">
+            <span class="detail-label">Status</span>
+            <span class="detail-value status-missed">Will Be Missed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leg 2 Train Card with Timeline Connector -->
+    <div class="export-box" style="width: 520px;" id="stage-leg2-with-connector">
+      <div class="timeline-leg broken" style="width: 100%;">
+        <div class="timeline-connector">
+          <div class="connector-dot broken-dot">
+            <i data-lucide="train-front"></i>
+          </div>
+          <div class="connector-line broken-line" style="min-height: 80px;"></div>
+        </div>
+        <div class="leg-card broken-card" style="flex: 1; margin: 0; background: var(--white); box-shadow: var(--shadow-lg);">
+          <div class="leg-header">
+            <div class="leg-title-row">
+              <span class="leg-label">Leg 2 — Train</span>
+              <span class="leg-badge badge-broken"><i data-lucide="unlink"></i> Connection Broken</span>
+            </div>
+            <h3 class="leg-name">Goa Express (12779)</h3>
+            <div class="leg-route">
+              <span class="station">MAO <small>Madgaon Jn.</small></span>
+              <span class="route-arrow"><i data-lucide="arrow-right"></i></span>
+              <span class="station">THVM <small>Thivim</small></span>
+            </div>
+          </div>
+          <div class="leg-details">
+            <div class="detail-item">
+              <span class="detail-label">Scheduled Departure</span>
+              <span class="detail-value">4:30 PM</span>
+            </div>
+            <div class="detail-item highlight-bad">
+              <span class="detail-label">Status</span>
+              <span class="detail-value status-missed">Will Be Missed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════ 5. AI & INPUT: TICKET INGESTION ZONE ═════════ -->
+    <div class="export-box export-box-card" id="stage-ticket-ingestion">
+      <div class="card ticket-ingest" style="width: 100%; margin: 0; background: var(--white); box-shadow: var(--shadow-lg);">
+        <div class="card-header">
+          <h2><i data-lucide="scan-line"></i> Ticket Ingestion</h2>
+          <span class="powered-tag"><i data-lucide="sparkles"></i> Gemini Multimodal OCR</span>
+        </div>
+        <div class="drop-zone" style="margin: 16px 20px;">
+          <div class="drop-zone-content">
+            <div class="drop-icon"><i data-lucide="upload-cloud"></i></div>
+            <p class="drop-text">Drop Ticket Screenshot, PNR SMS, or PDF</p>
+            <p class="drop-subtext">or <button class="browse-btn">browse files</button></p>
+          </div>
+        </div>
+        <div class="ingested-tags">
+          <span class="ingested-tag"><i data-lucide="ticket"></i> PNR: TXKL8M <i data-lucide="x" class="tag-remove"></i></span>
+          <span class="ingested-tag"><i data-lucide="image"></i> boarding_pass.jpg <i data-lucide="x" class="tag-remove"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════ 6. AI & INPUT: CONSTRAINT PILLS ═════════ -->
+    <!-- Grouped Constraint Pills -->
+    <div class="export-box" id="stage-constraint-pills-group">
+      <div class="constraint-chips" style="margin: 0; gap: 10px;">
+        <span class="constraint-chip" style="padding: 7px 15px; font-size: 13px; box-shadow: var(--shadow-xs);">
+          <i data-lucide="heart-pulse"></i> Senior citizen <button class="chip-remove"><i data-lucide="x"></i></button>
+        </span>
+        <span class="constraint-chip" style="padding: 7px 15px; font-size: 13px; box-shadow: var(--shadow-xs);">
+          <i data-lucide="indian-rupee"></i> Budget &lt; ₹3,000 <button class="chip-remove"><i data-lucide="x"></i></button>
+        </span>
+        <span class="constraint-chip" style="padding: 7px 15px; font-size: 13px; box-shadow: var(--shadow-xs);">
+          <i data-lucide="clock-3"></i> Arrive before 9:00 PM <button class="chip-remove"><i data-lucide="x"></i></button>
+        </span>
+        <span class="constraint-chip" style="padding: 7px 15px; font-size: 13px; box-shadow: var(--shadow-xs);">
+          <i data-lucide="moon-star"></i> No overnight buses <button class="chip-remove"><i data-lucide="x"></i></button>
+        </span>
+      </div>
+    </div>
+
+    <!-- Individual Constraint Pills -->
+    <div class="export-box" id="stage-pill-senior">
+      <span class="constraint-chip" style="padding: 8px 18px; font-size: 14px; box-shadow: var(--shadow-sm);">
+        <i data-lucide="heart-pulse"></i> Senior citizen <button class="chip-remove"><i data-lucide="x"></i></button>
+      </span>
+    </div>
+
+    <div class="export-box" id="stage-pill-budget">
+      <span class="constraint-chip" style="padding: 8px 18px; font-size: 14px; box-shadow: var(--shadow-sm);">
+        <i data-lucide="indian-rupee"></i> Budget &lt; ₹3,000 <button class="chip-remove"><i data-lucide="x"></i></button>
+      </span>
+    </div>
+
+    <div class="export-box" id="stage-pill-arrive">
+      <span class="constraint-chip" style="padding: 8px 18px; font-size: 14px; box-shadow: var(--shadow-sm);">
+        <i data-lucide="clock-3"></i> Arrive before 9:00 PM <button class="chip-remove"><i data-lucide="x"></i></button>
+      </span>
+    </div>
+
+    <!-- ═════════ 7. AI & INPUT: GREEN "AI AGENT ACTIVE" PILL ═════════ -->
+    <div class="export-box" id="stage-agent-active-pill">
+      <div class="agent-status" style="padding: 7px 16px; font-size: 13px; box-shadow: var(--shadow-sm);">
+        <span class="pulse-dot" style="width: 8px; height: 8px; background: var(--green-500); border-radius: 50%; display: inline-block;"></span>
+        <span class="status-text" style="font-weight: 600; color: var(--green-700);">AI Agent Active</span>
+        <span class="status-model" style="color: var(--slate-500);">(Gemini 2.5 Flash)</span>
+      </div>
+    </div>
+
+    <!-- ═════════ 8. SOLUTION: AKASA AIR QP-1382 RECOMMENDATION CARD ═════════ -->
+    <div class="export-box export-box-card-wide" id="stage-akasa-card">
+      <div class="option-card recommended" style="width: 100%; margin: 0; box-shadow: var(--shadow-xl), var(--shadow-glow-indigo); background: var(--white);">
+        <div class="option-ribbon">AI Pick — Recommended</div>
+        <div class="option-header">
+          <div class="option-transport">
+            <div class="transport-icon flight-icon"><i data-lucide="plane"></i></div>
+            <div>
+              <h3 class="option-name">Akasa Air QP-1382</h3>
+              <p class="option-route">BLR Terminal 1 → GOI Dabolim</p>
+            </div>
+          </div>
+          <div class="option-score">
+            <div class="score-ring" data-score="96">
+              <svg viewBox="0 0 36 36">
+                <path class="score-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="score-fill" stroke-dasharray="96, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <span class="score-value">96</span>
+            </div>
+            <span class="score-label">Match</span>
+          </div>
+        </div>
+        <div class="option-details-grid">
+          <div class="opt-detail">
+            <i data-lucide="clock"></i>
+            <div>
+              <span class="opt-label">Departs</span>
+              <span class="opt-value">1:45 PM <small>(in 90 min)</small></span>
+            </div>
+          </div>
+          <div class="opt-detail">
+            <i data-lucide="map-pin"></i>
+            <div>
+              <span class="opt-label">Arrives</span>
+              <span class="opt-value good-val">4:10 PM</span>
+            </div>
+          </div>
+          <div class="opt-detail">
+            <i data-lucide="indian-rupee"></i>
+            <div>
+              <span class="opt-label">Extra Cost</span>
+              <span class="opt-value">₹3,100</span>
+            </div>
+          </div>
+          <div class="opt-detail">
+            <i data-lucide="luggage"></i>
+            <div>
+              <span class="opt-label">Cabin Bag</span>
+              <span class="opt-value">7 kg included</span>
+            </div>
+          </div>
+        </div>
+        <div class="option-saves">
+          <span class="save-tag success"><i data-lucide="check-circle-2"></i> Saves train connection</span>
+          <span class="save-tag success"><i data-lucide="check-circle-2"></i> Zero hotel penalty</span>
+          <span class="save-tag success"><i data-lucide="check-circle-2"></i> Senior-friendly</span>
+        </div>
+        <div class="option-reasoning">
+          <div class="reasoning-icon"><i data-lucide="brain"></i></div>
+          <p><strong>Gemini Reasoning:</strong> Best constraint match — senior-citizen friendly, arrives 50 min before train departure, under ₹3,000 budget cap with partial credit from cancelled ticket, and prevents downstream hotel no-show penalty (₹4,500).</p>
+        </div>
+        <div class="option-actions">
+          <button class="btn-primary rebook-btn">
+            <i data-lucide="zap"></i> 1-Click Rebook
+          </button>
+          <button class="btn-secondary">
+            <i data-lucide="info"></i> View Details
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════ 9. SOLUTION: AUTO-DRAFTED HOTEL HOLD MESSAGE CARD ═════════ -->
+    <div class="export-box export-box-card-wide" id="stage-hotel-dispatch">
+      <div class="dispatch-card" style="width: 100%; margin: 0; background: var(--white); box-shadow: var(--shadow-lg);">
+        <div class="dispatch-card-header">
+          <div class="dispatch-title">
+            <div class="dispatch-icon hotel-dispatch-icon"><i data-lucide="building-2"></i></div>
+            <div>
+              <h3>Auto-Drafted Hotel Hold Message</h3>
+              <p class="dispatch-dest">To: Taj North Goa — Front Desk Reception</p>
+            </div>
+          </div>
+          <span class="dispatch-status-tag pending"><i data-lucide="clock"></i> Pending</span>
+        </div>
+        <div class="dispatch-message-box">
+          <textarea rows="4" readonly style="cursor: default;">Hello Front Desk,
+
+This is regarding booking PNR #A8X92B under the name Chirag Kumar. Our IndiGo flight 6E-402 (BLR → GOI) has been delayed by 6 hours. We are now arriving at approximately 12:30 AM via an alternate train. 
+
+Could you kindly hold our booking and waive the no-show fee? We will be checking in late tonight. Thank you for your understanding.</textarea>
+        </div>
+        <div class="dispatch-actions">
+          <button class="btn-dispatch whatsapp"><i data-lucide="message-circle"></i> Send via WhatsApp API</button>
+          <button class="btn-dispatch email"><i data-lucide="mail"></i> Send via Email</button>
+          <button class="btn-dispatch edit"><i data-lucide="pencil"></i> Edit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════════ 10. SOLUTION: BLUE "1-CLICK REBOOK" BUTTON ═════════ -->
+    <div class="export-box" id="stage-rebook-btn">
+      <button class="btn-primary" style="padding: 12px 28px; font-size: 15px; box-shadow: var(--shadow-md), 0 0 15px rgba(37, 99, 235, 0.25);">
+        <i data-lucide="zap" style="width: 18px; height: 18px;"></i> 1-Click Rebook
+      </button>
+    </div>
+
+    <!-- ═════════ 11. SOLUTION: GREEN "SEND VIA WHATSAPP API" BUTTON ═════════ -->
+    <div class="export-box" id="stage-whatsapp-btn">
+      <button class="btn-dispatch whatsapp" style="padding: 11px 24px; font-size: 14px; box-shadow: var(--shadow-md), 0 0 15px rgba(37, 211, 102, 0.3);">
+        <i data-lucide="message-circle" style="width: 16px; height: 16px;"></i> Send via WhatsApp API
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

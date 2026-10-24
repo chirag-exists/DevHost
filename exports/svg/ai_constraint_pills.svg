@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 50" width="650" height="50" fill="none">
+  <style>
+    .chip-text { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; fill: #1E40AF; }
+  </style>
+  <!-- Pill 1: Senior citizen -->
+  <g transform="translate(0, 5)">
+    <rect x="2" y="2" width="180" height="36" rx="18" fill="#EFF6FF" stroke="#DBEAFE" stroke-width="1.2" />
+    <g transform="translate(14, 10)" stroke="#1D4ED8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+    </g>
+    <text x="42" y="25" class="chip-text">Senior citizen</text>
+    <g transform="translate(150, 12)" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"><line x1="14" y1="4" x2="4" y2="14" /><line x1="4" y1="4" x2="14" y2="14" /></g>
+  </g>
+  <!-- Pill 2: Budget < ₹3,000 -->
+  <g transform="translate(195, 5)">
+    <rect x="2" y="2" width="165" height="36" rx="18" fill="#EFF6FF" stroke="#DBEAFE" stroke-width="1.2" />
+    <g transform="translate(14, 10)" stroke="#1D4ED8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M6 3h12M6 8h12M6 13l8.5 8M6 13h3a4.5 4.5 0 0 0 0-9" />
+    </g>
+    <text x="42" y="25" class="chip-text">Budget &lt; ₹3,000</text>
+    <g transform="translate(135, 12)" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"><line x1="14" y1="4" x2="4" y2="14" /><line x1="4" y1="4" x2="14" y2="14" /></g>
+  </g>
+  <!-- Pill 3: Arrive before 9:00 PM -->
+  <g transform="translate(375, 5)">
+    <rect x="2" y="2" width="205" height="36" rx="18" fill="#EFF6FF" stroke="#DBEAFE" stroke-width="1.2" />
+    <g transform="translate(14, 10)" stroke="#1D4ED8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <circle cx="10" cy="10" r="9" />
+      <polyline points="10 5 10 10 14 10" />
+    </g>
+    <text x="42" y="25" class="chip-text">Arrive before 9:00 PM</text>
+    <g transform="translate(175, 12)" stroke="#94A3B8" stroke-width="1.8" stroke-linecap="round"><line x1="14" y1="4" x2="4" y2="14" /><line x1="4" y1="4" x2="14" y2="14" /></g>
+  </g>
+</svg>
